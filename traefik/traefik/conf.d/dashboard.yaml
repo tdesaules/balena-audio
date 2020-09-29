@@ -1,0 +1,7 @@
+http:
+  routers:
+    api:
+      entryPoints:
+        - web-http
+      rule: Host(`traefik.%%SUBDOMAIN%%.%%DOMAIN%%`)
+      service: api@internal

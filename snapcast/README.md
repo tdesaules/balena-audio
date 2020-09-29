@@ -1,0 +1,3 @@
+# SNAPCAST AGENT CONTAINER
+
+## Details

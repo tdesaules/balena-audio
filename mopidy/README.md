@@ -1,0 +1,3 @@
+# MOPIDY CONTAINER
+
+## Details

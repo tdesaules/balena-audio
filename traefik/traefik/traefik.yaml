@@ -1,0 +1,14 @@
+global:
+  checkNewVersion: true
+  sendAnonymousUsage: false
+
+entryPoints:
+  web-http:
+    address: :80
+
+providers:
+  file:
+    directory: "/etc/traefik/conf.d"
+
+api:
+  dashboard: true

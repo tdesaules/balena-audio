@@ -1,0 +1,13 @@
+http:
+  routers:
+    mopidy:
+      entryPoints:
+        - web-http
+      rule: Host(`mopidy.%%SUBDOMAIN%%.%%DOMAIN%%`)
+      service: mopidy
+  services:
+    mopidy:
+      loadBalancer:
+        servers:
+          - url: "http://%%BALENA_HOST_IP%%:8080/"
+  

@@ -1,0 +1,23 @@
+FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine:3.11
+
+# set dbus address
+ENV DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
+ENV UDEV=1
+ENV BALENA_DEVICE_TYPE=%%BALENA_MACHINE_NAME%%
+
+# create folder to store install scripts
+RUN mkdir /root/install
+
+# copy base scripts to the created folder
+COPY install-base.sh /root/install/install-base.sh
+COPY install-mopidy.sh /root/install/install-mopidy.sh
+COPY start.sh /root/install/start.sh
+
+# add specific apps related conf and script
+COPY mopidy.conf /root/.config/mopidy/mopidy.conf
+
+# run script to prepare env
+RUN /bin/ash /root/install/install-base.sh
+RUN /bin/ash /root/install/install-mopidy.sh
+
+CMD [ "/bin/ash", "/root/install/start.sh" ]
