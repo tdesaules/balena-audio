@@ -8,24 +8,12 @@ fi
 # set env var
 export BALENA_HOST_IP=$(curl -X GET --header "Content-Type:application/json" "$BALENA_SUPERVISOR_ADDRESS/v1/device?apikey=$BALENA_SUPERVISOR_API_KEY" | jq -r '.ip_address')
 export BALENA_HOST_MAC=$(ifconfig wlan0 2>/dev/null | awk '/HWaddr/ {print $5}' | tr '[:upper:]' '[:lower:]')
-if [ "$SPOTIFY_DEVICE_NAME" == "none" ] ; then
-    export SPOTIFY_DEVICE_NAME=$BALENA_DEVICE_NAME_AT_INIT
-fi
 
-# configure alsa
-amixer -M sset PCM,0 $ALSA_VOLUME
+# run program
+for STREAM in $(echo $STREAMS | jq -r '.[].name')
+do
+    #snapwatcher /var/cache/snapcast/$STREAM &
+done
 
-# start spotify
-librespot \
-    --name $SPOTIFY_DEVICE_NAME \
-    --backend pipe \
-    --device /var/cache/snapcast/snapfifo \
-    --cache /var/cache/spotify \
-    --bitrate 320 \
-    --device-type speaker \
-    --username $SPOTIFY_USERNAME \
-    --password $SPOTIFY_PASSWORD \
-    --enable-volume-normalisation \
-    --linear-volume \
-    --initial-volume 100 &
+# don't stop the container if something crash
 sleep infinity

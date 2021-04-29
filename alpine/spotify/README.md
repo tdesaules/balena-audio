@@ -1,3 +1,1 @@
 # SPOTIFY CONTAINER
-
-## Details
