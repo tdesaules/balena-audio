@@ -12,7 +12,7 @@ apk add --no-cache \
     alsaconf \
     cargo
 
-URL="https://github.com/librespot-org/librespot/archive/refs/tags/$(curl --header "Content-Type:application/json" "https://api.github.com/repos/librespot-org/librespot/git/refs/tags" --silent | jq -r '.[-1].ref' | cut -d '/' -f 3).zip"
+URL="https://github.com/librespot-org/librespot/archive/refs/tags/$(curl --silent --request GET --header "Content-Type:application/json" "https://api.github.com/repos/librespot-org/librespot/git/refs/tags" | jq -r '.[-1].ref' | cut -d '/' -f 3).zip"
 wget $URL --output-document "/tmp/librespot.zip" --quiet
 unzip "/tmp/librespot.zip" -d "/opt"
 cd /opt/$(ls /opt/ | grep librespot*)
