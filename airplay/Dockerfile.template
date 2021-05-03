@@ -12,4 +12,5 @@ COPY run.sh /root/run.sh
 # run script to prepare env
 RUN /bin/ash /root/install.sh
 
+# run programm
 CMD [ "/bin/ash", "/root/run.sh" ]

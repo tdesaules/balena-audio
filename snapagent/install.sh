@@ -1,6 +1,6 @@
 #!/bin/ash
 
-# check update
+# update and install mandatory package
 apk update
 apk upgrade
 apk add --no-cache \
@@ -9,6 +9,8 @@ apk add --no-cache \
     alsa-lib \
     alsa-plugins \
     alsaconf
-
 apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/community \
     snapcast-server
+
+# clean package
+apk --purge del

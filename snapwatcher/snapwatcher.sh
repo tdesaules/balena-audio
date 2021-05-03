@@ -9,7 +9,7 @@ do
     # reset hash
     STREAM_STATUS=()
     # retrieve info over snapcast server to get the current status
-    RESPONSE=$(echo '{"id":1,"jsonrpc":"2.0","method":"Server.GetStatus"}' | nc -w 1 $SNAPSERVER_HOST 1705)
+    RESPONSE=$(curl --silent --request POST --header "Content-Type:application/json" "http://$SNAPSERVER_HOST:1780/jsonrpc" --data '{"id":1,"jsonrpc":"2.0","method":"Server.GetStatus"}')
     # for all stream detected create an hash with status for all stream
     for STREAM in $(echo $RESPONSE | jq -r '.result.server.streams[].id')
     do
@@ -31,12 +31,12 @@ do
             do
                 # retrieve the group id where the client is (a group is in fact a association between a strem and a client)
                 ID=$(echo $RESPONSE | jq -r ".result.server.groups[] | select (.clients[].config.name==\"$MEMBER\")" | jq -r '.id')
-                CLIENT_STREAM=$(echo "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"Group.GetStatus\",\"params\":{\"id\":\"$ID\"}}" | nc -w 1 $SNAPSERVER_HOST 1705 | jq -r '.result.group.stream_id')
+                CLIENT_STREAM=$(curl --silent --request POST --header "Content-Type:application/json" "http://$SNAPSERVER_HOST:1780/jsonrpc" --data "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"Group.GetStatus\",\"params\":{\"id\":\"$ID\"}}" | jq -r '.result.group.stream_id')
                 # if name defined in the client is the same as the stream : we play localy bedroom device with bedroom stream
                 if [ $MEMBER == $STREAM ] && [ $CLIENT_STREAM != $STREAM ]
                 then
                     # associate the stream playing to the local device
-                    NEW_CLIENT_STREAM=$(echo "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"Group.SetStream\",\"params\":{\"id\":\"$ID\",\"stream_id\":\"$STREAM\"}}" | nc -w 1 $SNAPSERVER_HOST 1705 | jq -r '.result.stream_id')
+                    NEW_CLIENT_STREAM=$(curl --silent --request POST --header "Content-Type:application/json" "http://$SNAPSERVER_HOST:1780/jsonrpc" --data "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"Group.SetStream\",\"params\":{\"id\":\"$ID\",\"stream_id\":\"$STREAM\"}}" | jq -r '.result.stream_id')
                     echo "device $MEMBER attach to stream $STREAM"
                 fi
                 # if stream name is different from the device name so we play a multiroom stream
@@ -44,7 +44,7 @@ do
                 if [ $MEMBER != $STREAM ] && [ "${STREAM_STATUS[$MEMBER]}" != "playing" ] && [ $CLIENT_STREAM != $STREAM ]
                 then
                     # associate the stream playing to the local device
-                    NEW_CLIENT_STREAM=$(echo "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"Group.SetStream\",\"params\":{\"id\":\"$ID\",\"stream_id\":\"$STREAM\"}}" | nc -w 1 $SNAPSERVER_HOST 1705 | jq -r '.result.stream_id')
+                    NEW_CLIENT_STREAM=$(curl --silent --request POST --header "Content-Type:application/json" "http://$SNAPSERVER_HOST:1780/jsonrpc" --data "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"Group.SetStream\",\"params\":{\"id\":\"$ID\",\"stream_id\":\"$STREAM\"}}" | jq -r '.result.stream_id')
                     echo "device $MEMBER attach to stream $STREAM"
                 fi
             done
