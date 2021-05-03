@@ -9,9 +9,6 @@ ENV BALENA_DEVICE_TYPE=%%BALENA_MACHINE_NAME%%
 COPY install.sh /root/install.sh
 COPY run.sh /root/run.sh
 
-# add specific apps related conf and script
-COPY asound.conf /etc/asound.conf
-
 # run script to prepare env
 RUN /bin/ash /root/install.sh
 

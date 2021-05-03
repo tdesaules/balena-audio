@@ -10,7 +10,10 @@ apk add --no-cache \
     alsa-plugins \
     alsaconf
 apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/community \
-    snapcast-server
+    snapcast-client
+
+# allow root to use audio
+addgroup root audio
 
 # clean package
 apk --purge del
