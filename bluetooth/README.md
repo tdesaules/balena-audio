@@ -1,4 +1,4 @@
-# BLUETOOTH CONTAINER
+# BLUETOOTH
 
 ## Details
 

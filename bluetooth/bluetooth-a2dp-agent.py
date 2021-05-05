@@ -13,8 +13,8 @@ except ImportError:
 
 AGENT_INTERFACE = "org.bluez.Agent1"
 AGENT_PATH = "/test/agent"
-MAC_ADDRESS = %%BLUETOOTH_MAC_ADDRESS%%
-PIN_CODE = %%BLUETOOTH_PIN_CODE%%
+MAC_ADDRESS = {BLUETOOTH_MAC_ADDRESS}
+PIN_CODE = {BLUETOOTH_PIN_CODE}
 
 MAC_ADDRESS = [MAC.replace(':', '_') for MAC in MAC_ADDRESS]
 DEVICES = [ "/org/bluez/hci0/dev_" + MAC for MAC in MAC_ADDRESS]

@@ -11,11 +11,18 @@ apk upgrade
 apk add --no-cache \
     jq \
     alsa-utils \
+    alsa-utils-doc \
     alsa-lib \
     alsa-plugins \
-    alsaconf
-apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
-    snapcast-client@edgecommunity
+    alsaconf \
+    python3 \
+    py3-dbus \
+    py3-gobject3 \
+    fdk-aac \
+    bluez-alsa \
+    bluez@edge \
+    bluez-btmon@edge
+    bluez-deprecated@edge
 
 # allow root to use audio
 addgroup root audio

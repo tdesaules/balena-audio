@@ -1,5 +1,10 @@
 #!/bin/ash
 
+# add edge repositories
+echo "@edge http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
+echo "@edgecommunity http://nl.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
+echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+
 # update and install mandatory package
 apk update
 apk upgrade
@@ -10,7 +15,12 @@ apk add --no-cache \
     alsa-lib-dev \
     alsa-plugins \
     alsaconf \
-    cargo
+    git \
+    rust@edge \
+    cargo@edgecommunity
+
+# export some env var
+export CARGO_NET_GIT_FETCH_WITH_CLI=true
 
 # build librespot binbary
 URL="https://github.com/librespot-org/librespot/archive/refs/tags/$(curl --silent --request GET --header "Content-Type:application/json" "https://api.github.com/repos/librespot-org/librespot/git/refs/tags" | jq -r '.[-1].ref' | cut -d '/' -f 3).zip"
@@ -27,4 +37,5 @@ rm -rf /opt/librespot-*
 # # clean package
 apk --purge del \
     alsa-lib-dev \
+    git \
     cargo
