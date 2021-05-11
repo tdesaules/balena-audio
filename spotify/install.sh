@@ -34,7 +34,7 @@ ln -s /opt/librespot/librespot /usr/bin/librespot
 # clean source
 rm -rf /tmp/librespot.zip
 rm -rf /opt/librespot-*
-# # clean package
+# clean package
 apk --purge del \
     alsa-lib-dev \
     git \

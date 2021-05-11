@@ -3,10 +3,8 @@
 # if tag to be stop then exit it
 if [ "$IS_STARTED" != "true" ] ; then
     curl --silent --request POST --header "Content-Type:application/json" "$BALENA_SUPERVISOR_ADDRESS/v2/applications/$BALENA_APP_ID/stop-service?apikey=$BALENA_SUPERVISOR_API_KEY" --data '{"serviceName": "'$BALENA_SERVICE_NAME'"}'
-    sleep 20
+    sleep 30
 fi
-
-export BALENA_HOST_MAC=$(ifconfig wlan0 2>/dev/null | awk '/HWaddr/ {print $5}' | tr '[:upper:]' '[:lower:]')
 
 # replace conf var
 sed -i "s/{SOUND_CARD}/$SOUND_CARD/g" /etc/asound.conf
@@ -17,11 +15,13 @@ sed -i "s/defaults.pcm.dmix.rate 48000/defaults.pcm.dmix.rate $SOUND_RATE/g" /us
 # start snapcast client
 snapclient --host $SNAPSERVER_HOST --soundcard $SOUND_CARD &
 
-# sleep a few sec to let time to connect client to server before changing name
-sleep 3
 # set client name
-export BALENA_HOST_MAC=$(ifconfig wlan0 2>/dev/null | awk '/HWaddr/ {print $5}' | tr '[:upper:]' '[:lower:]')
-curl --silent --request POST --header "Content-Type:application/json" "http://$SNAPSERVER_HOST:1780/jsonrpc" --data "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"Client.SetName\",\"params\":{\"id\":\"$BALENA_HOST_MAC\",\"name\":\"$BALENA_DEVICE_NAME_AT_INIT\"}}" | jq
+while true
+do
+    BALENA_HOST_MAC=$(ifconfig wlan0 2>/dev/null | awk '/HWaddr/ {print $5}' | tr '[:upper:]' '[:lower:]')
+    curl --silent --request POST --header "Content-Type:application/json" "http://${SNAPSERVER_HOST}:${SNAPSERVER_PORT}/jsonrpc" --data "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"Client.SetName\",\"params\":{\"id\":\"$BALENA_HOST_MAC\",\"name\":\"$BALENA_DEVICE_NAME_AT_INIT\"}}" | jq
+    sleep 30
+done
 
 # don't stop the container if something crash
 sleep infinity

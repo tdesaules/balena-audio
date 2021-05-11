@@ -7,14 +7,14 @@ if [ "$IS_STARTED" != "true" ] ; then
 fi
 
 # for each AUDIO_SOURCES defined in balena cloud anv variable json
-for AUDIO_SOURCE in $(echo $AUDIO_SOURCES | jq -r '.[].name')
+for ROOM in $(echo $SOURCES | jq -r '.[] | select(.name=="bluetooth")' | jq -r '.rooms[]')
 do
     # build a string with the stream options for snapserver based on balena cloud env variables
-    STREAM_SOURCE="${STREAM_SOURCE}--stream.source pipe:///var/cache/snapcast/$AUDIO_SOURCE?name=$AUDIO_SOURCE&codec=pcm&sampleformat=$SOUND_RATE:$SOUND_BIT:2 "
+    STREAMS="${STREAMS}--stream.source pipe:///var/cache/snapcast/${ROOM}?name=${ROOM}&codec=pcm&sampleformat=${SOUND_RATE}:${SOUND_BIT}:2 "
 done
 
 # start snapcast server
-snapserver $STREAM_SOURCE &
+snapserver $STREAMS &
 
 # sleep forever to be allowed to access container if crash happen
 sleep infinity

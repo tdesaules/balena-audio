@@ -8,8 +8,6 @@ ENV BALENA_DEVICE_TYPE=%%BALENA_MACHINE_NAME%%
 # copy base scripts to the created folder
 COPY install.sh /root/install.sh
 COPY run.sh /root/run.sh
-COPY snapwatcher.sh /root/snapwatcher.sh
-COPY snapwatcher.js /root/snapwatcher.js
 
 # run script to prepare env
 RUN /bin/ash /root/install.sh

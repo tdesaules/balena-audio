@@ -6,8 +6,8 @@ if [ "$IS_STARTED" != "true" ] ; then
     sleep 20
 fi
 
-# for all STREAM based on env Balena Cloud STREAMS json list
-for STREAM in $(echo $STREAMS | jq -r '.[].name')
+# for all STREAM based on env Balena Cloud SOURCES json list
+for SOURCE in $(echo $SOURCES | jq -r '.[].name')
 do
     
 done

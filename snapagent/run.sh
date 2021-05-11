@@ -12,19 +12,19 @@ export BALENA_HOST_MAC=$(ifconfig wlan0 2>/dev/null | awk '/HWaddr/ {print $5}' 
 
 # replace conf var
 sed -i "s/defaults.pcm.dmix.rate 48000/defaults.pcm.dmix.rate $SOUND_RATE/g" /usr/share/alsa/alsa.conf
-for STREAM in $(echo $STREAMS | jq -r '.[] | select(.name=="bluetooth")' | jq -r '.streams[]')
+for ROOM in $(echo $SOURCES | jq -r '.[] | select(.name=="bluetooth")' | jq -r '.rooms[]')
 do
 echo "
-pcm.file_bluetooth_${STREAM} {
+pcm.file_bluetooth_${ROOM} {
     type file
     slave.pcm null
-    file /var/cache/snapcast/bluetooth_${STREAM}
+    file /var/cache/snapcast/bluetooth_${ROOM}
     format raw
 }
-pcm.bluetooth_${STREAM} {
+pcm.bluetooth_${ROOM} {
     type rate
     slave {
-        pcm file_bluetooth_${STREAM}
+        pcm file_bluetooth_${ROOM}
         format S${SOUD_BIT}_LE
         rate $SOUND_RATE
     }
@@ -33,11 +33,11 @@ pcm.bluetooth_${STREAM} {
 done
 
 # start snapcast client
-for STREAM in $(echo $STREAMS | jq -r '.[] | select(.name=="bluetooth")' | jq -r '.streams[]')
+for ROOM in $(echo $SOURCES | jq -r '.[] | select(.name=="bluetooth")' | jq -r '.rooms[]')
 do
     for CLIENT_IP in $(curl --silent --request GET --header "Content-Type:application/json" --header "Authorization: Bearer $TOKEN_API" "https://api.balena-cloud.com/v6/device" | jq '.d[] | select(.device_name!="master")' | jq -r '.ip_address')
     do
-        echo "snapclient --host $CLIENT_IP --soundcard $STREAM &"
+        echo "snapclient --host $CLIENT_IP --soundcard $ROOM &"
     done
 done
 

@@ -12,7 +12,7 @@ if [ "$SPOTIFY_DEVICE_NAME" == "none" ] ; then
     export SPOTIFY_DEVICE_NAME=$BALENA_DEVICE_NAME_AT_INIT
 fi
 
-for STREAM in $(echo $STREAMS | jq -r '.[].name')
+for STREAM in $(echo $SOURCES | jq -r '.[].name')
 do
     # start spotify
     librespot \

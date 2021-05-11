@@ -10,7 +10,7 @@ export BALENA_HOST_IP=$(curl -X GET --header "Content-Type:application/json" "$B
 export BALENA_HOST_MAC=$(ifconfig wlan0 2>/dev/null | awk '/HWaddr/ {print $5}' | tr '[:upper:]' '[:lower:]')
 
 # replace conf var
-for STREAM in $(echo $STREAMS | jq -r '.[].name')
+for STREAM in $(echo $SOURCES | jq -r '.[].name')
 do
     echo "stream = pipe:///var/cache/snapcast/$STREAM?name=$STREAM&codec=pcm&sampleformat={SNAPCAST_RATE}:{SNAPCAST_BIT}:2" >> /etc/snapserver.conf
 done

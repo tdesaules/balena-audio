@@ -21,7 +21,7 @@ apk add --no-cache \
     fdk-aac \
     bluez-alsa \
     bluez@edge \
-    bluez-btmon@edge
+    bluez-btmon@edge \
     bluez-deprecated@edge
 
 # allow root to use audio
