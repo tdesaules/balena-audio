@@ -11,6 +11,7 @@ COPY run.sh /root/run.sh
 
 # add specific apps related conf and script
 COPY asound.conf /etc/asound.conf
+COPY snapinitializer.sh /usr/bin/snapinitializer
 
 # run script to prepare env
 RUN /bin/ash /root/install.sh

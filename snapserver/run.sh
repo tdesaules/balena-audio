@@ -19,6 +19,8 @@ do
     done
 done
 
+STREAMS="${STREAMS}--stream.source pipe:///var/cache/snapcast/idle?name=idle&codec=pcm&sampleformat=${SOUND_RATE}:${SOUND_BIT}:2"
+
 # start snapcast server
 snapserver $STREAMS &
 

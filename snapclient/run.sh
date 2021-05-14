@@ -14,14 +14,8 @@ sed -i "s/defaults.pcm.dmix.rate 48000/defaults.pcm.dmix.rate $SOUND_RATE/g" /us
 
 # start snapcast client
 snapclient --host $SNAPSERVER_HOST --soundcard $SOUND_CARD &
-
-# set client name
-while true
-do
-    BALENA_HOST_MAC=$(ifconfig wlan0 2>/dev/null | awk '/HWaddr/ {print $5}' | tr '[:upper:]' '[:lower:]')
-    curl --silent --request POST --header "Content-Type:application/json" "http://${SNAPSERVER_HOST}:${SNAPSERVER_PORT}/jsonrpc" --data "{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"Client.SetName\",\"params\":{\"id\":\"$BALENA_HOST_MAC\",\"name\":\"$BALENA_DEVICE_NAME_AT_INIT\"}}" | jq
-    sleep 30
-done
+# start snapcast initilizer
+snapinitializer &
 
 # don't stop the container if something crash
 sleep infinity
